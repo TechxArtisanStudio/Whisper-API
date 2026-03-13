@@ -4,7 +4,7 @@ Core transcription logic: convert media to WAV, load Whisper, transcribe, format
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Union
 
 import whisper
 
@@ -91,7 +91,7 @@ def segments_to_text(segments: list[dict]) -> str:
 def transcribe(
     input_path: str,
     model_name: str = "base",
-    language: str | None = None,
+    language: Union[str, None] = None,
     output_format: Literal["srt", "text"] = "text",
 ) -> tuple[str, list[dict]]:
     """

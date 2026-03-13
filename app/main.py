@@ -3,6 +3,7 @@ Whisper API server: transcribe audio/video to SRT or plain text.
 """
 import tempfile
 from pathlib import Path
+from typing import Union, Optional
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
@@ -30,8 +31,8 @@ class ModelsResponse(BaseModel):
 
 
 class TranscribeResponse(BaseModel):
-    text: str | None = None
-    srt: str | None = None
+    text: Optional[str] = None
+    srt: Optional[str] = None
     segments: list[dict]
 
 
@@ -59,7 +60,7 @@ async def transcribe_endpoint(
     file: UploadFile = File(..., description="Audio or video file (any format supported by ffmpeg)"),
     model: str = Form("base", description="Whisper model: base or large-v3"),
     output_format: str = Form("text", description="Output format: srt (with timestamps) or text (plain)"),
-    language: str | None = Form(None, description="Language code (e.g. en, zh). Omit for auto-detect."),
+    language: Union[str, None] = Form(None, description="Language code (e.g. en, zh). Omit for auto-detect."),
 ):
     """
     Transcribe uploaded audio/video file to text or SRT subtitles.
